@@ -1,28 +1,36 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'motion/react';
-import { Logo } from '@/components/ui/logo';
-import { Instagram } from 'lucide-react';
+import { useState, useEffect } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "motion/react";
+import { Logo } from "@/components/ui/logo";
+import { Instagram } from "lucide-react";
 
 const navLinks = [
-  { label: 'Главная', href: '#hero' },
-  { label: 'О нас', href: '#about' },
-  { label: 'Направления', href: '#directions' },
-  { label: 'События', href: '#events' },
-  { label: 'Команда', href: '#team' },
+  { label: "Главная", href: "#hero" },
+  { label: "О нас", href: "#about" },
+  { label: "Направления", href: "#directions" },
+  { label: "События", href: "#events" },
+  { label: "Команда", href: "#team" },
 ];
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
   const [showOutline, setShowOutline] = useState(false);
 
   const { scrollY } = useScroll();
   const SCROLL_THRESHOLD = 200;
 
-  // Shrinking pill: full-width → narrow on scroll
-  const maxWidthValue = useTransform(scrollY, [0, SCROLL_THRESHOLD], [1280, 820]);
+  const maxWidthValue = useTransform(
+    scrollY,
+    [0, SCROLL_THRESHOLD],
+    [1280, 820],
+  );
   const blurValue = useTransform(scrollY, [0, SCROLL_THRESHOLD], [8, 16]);
 
   const springMaxWidth = useSpring(maxWidthValue, {
@@ -38,53 +46,53 @@ export function Header() {
 
   useEffect(() => {
     const updateOnScroll = () => {
-      setHasScrolled(window.scrollY > 0);
       setShowOutline(springMaxWidth.get() <= 750);
     };
 
     updateOnScroll();
-    window.addEventListener('scroll', updateOnScroll, { passive: true });
+    window.addEventListener("scroll", updateOnScroll, { passive: true });
 
-    const unsubscribe = springMaxWidth.on('change', () => {
+    const unsubscribe = springMaxWidth.on("change", () => {
       setShowOutline(springMaxWidth.get() <= 750);
     });
 
     return () => {
-      window.removeEventListener('scroll', updateOnScroll);
+      window.removeEventListener("scroll", updateOnScroll);
       unsubscribe();
     };
   }, [springMaxWidth]);
 
   return (
     <>
-      <header className="pointer-events-none fixed left-0 right-0 top-0 z-50 w-full px-4 py-3 mx-auto">
+      <header className="pointer-events-none fixed left-0 right-0 top-0 z-50 w-full px-4 py-3">
         <motion.nav
-          className="pointer-events-auto flex w-full items-center justify-between gap-2 rounded-full px-4 py-1.5 sm:pr-2.5 mx-auto overflow-hidden"
+          className="pointer-events-auto relative mx-auto flex w-full items-center rounded-full px-5 py-1.5"
           style={{
-            width: '100%',
             maxWidth: springMaxWidth,
-            backgroundColor: 'rgba(14, 23, 51, 0.9)',
+            backgroundColor: "rgba(14, 23, 51, 0.9)",
             backdropFilter: `blur(${springBlur}px)`,
             outline: showOutline
-              ? '1px solid rgba(200, 182, 255, 0.1)'
-              : 'none',
+              ? "1px solid rgba(200, 182, 255, 0.1)"
+              : "none",
           }}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.25, 0.4, 0.25, 1] }}
         >
-          {/* Logo */}
-          <motion.a
-            href="#hero"
-            className="flex-shrink-0"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Logo size="sm" />
-          </motion.a>
+          {/* ── Left: Logo ── */}
+          <div className="flex shrink-0 items-center">
+            <motion.a
+              href="#hero"
+              className="shrink-0"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Logo size="sm" />
+            </motion.a>
+          </div>
 
-          {/* Desktop Nav — animated links */}
-          <ul className="hidden lg:flex items-center gap-0.5 text-sm flex-shrink min-w-0">
+          {/* ── Center: Nav links ── */}
+          <ul className="hidden lg:flex flex-1 items-center justify-center gap-0.5 px-6 text-sm">
             {navLinks.map((link) => (
               <li key={link.href} className="group relative">
                 <motion.a
@@ -106,13 +114,14 @@ export function Header() {
             ))}
           </ul>
 
-          {/* Right side: CTA */}
-          <div className="hidden lg:flex items-center flex-shrink-0 ml-auto">
+          {/* ── Right: CTA + Mobile toggle ── */}
+          <div className="ml-auto flex items-center justify-end gap-4 lg:pl-2">
+            {/* Desktop CTA */}
             <motion.a
               href="https://www.instagram.com/devine_aitu"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium rounded-full bg-devine-lavender/10 text-devine-lavender border border-devine-lavender/20 hover:bg-devine-lavender/20 hover:border-devine-lavender/40 hover:shadow-[0_0_20px_rgba(200,182,255,0.15)] transition-all duration-300 whitespace-nowrap"
+              className="hidden lg:inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium rounded-full bg-devine-lavender/10 text-devine-lavender border border-devine-lavender/20 hover:bg-devine-lavender/20 hover:border-devine-lavender/40 hover:shadow-[0_0_20px_rgba(200,182,255,0.15)] transition-all duration-300 whitespace-nowrap"
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
             >
@@ -120,27 +129,31 @@ export function Header() {
               Стать девайнеркой
               <span className="text-xs">→</span>
             </motion.a>
-          </div>
 
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden flex flex-col gap-1.5 p-2"
-            aria-label="Toggle menu"
-          >
-            <motion.span
-              animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-              className="block w-5 h-[2px] bg-white/80"
-            />
-            <motion.span
-              animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-              className="block w-5 h-[2px] bg-white/80"
-            />
-            <motion.span
-              animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-              className="block w-5 h-[2px] bg-white/80"
-            />
-          </button>
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="lg:hidden flex flex-col gap-1.5 p-2"
+              aria-label="Toggle menu"
+            >
+              <motion.span
+                animate={
+                  mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }
+                }
+                className="block h-0.5 w-5 bg-white/80"
+              />
+              <motion.span
+                animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
+                className="block h-0.5 w-5 bg-white/80"
+              />
+              <motion.span
+                animate={
+                  mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }
+                }
+                className="block h-0.5 w-5 bg-white/80"
+              />
+            </button>
+          </div>
         </motion.nav>
       </header>
 
@@ -163,7 +176,7 @@ export function Header() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="w-full text-center py-3 text-lg text-white/80 hover:text-white border-b border-white/[0.06] transition-colors"
+                  className="w-full border-b border-white/6 py-3 text-center text-lg text-white/80 transition-colors hover:text-white"
                 >
                   {link.label}
                 </motion.a>
