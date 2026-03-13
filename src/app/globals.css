@@ -1,26 +1,114 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* ── Devine Brand Colors ── */
+  --color-devine-navy: #0F1F3D;
+  --color-devine-white: #FFFFFF;
+  --color-devine-lavender: #C8B6FF;
+  --color-devine-gold: #F4D8A8;
+  --color-devine-sky: #E8F0FF;
+  --color-devine-purple: #9D6EFF;
+  --color-devine-dark: #080E1A;
+
+  /* ── Fonts ── */
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-playfair);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Smooth scrolling ── */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ── Custom scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080E1A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C8B6FF;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9D6EFF;
+}
+
+/* ── Glow border utility ── */
+.glow-border {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(#0F1F3D, #0F1F3D) padding-box,
+    linear-gradient(135deg, rgba(200, 182, 255, 0.4), rgba(157, 110, 255, 0.4)) border-box;
+  transition: all 0.3s ease;
+}
+
+.glow-border:hover {
+  background:
+    linear-gradient(#0F1F3D, #0F1F3D) padding-box,
+    linear-gradient(135deg, rgba(200, 182, 255, 0.8), rgba(157, 110, 255, 0.8)) border-box;
+  box-shadow: 0 0 24px rgba(200, 182, 255, 0.15);
+}
+
+/* ── Text shimmer animation ── */
+@keyframes shimmer {
+  0% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: 0% center;
+  }
+}
+
+/* ── Float animation for decorative elements ── */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(5px) rotate(-1deg);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.animate-float-slow {
+  animation: float 8s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+/* ── Pulse glow ── */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
 }
