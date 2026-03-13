@@ -2,7 +2,7 @@
 
 import { motion } from 'motion/react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
-import { Bird, Sparkles, Flower2, Heart, PawPrint, ArrowRight } from 'lucide-react';
+import { Sparkles, Flower2, Heart, PawPrint, ArrowRight } from 'lucide-react';
 
 export function HeroSection() {
   return (
@@ -10,7 +10,7 @@ export function HeroSection() {
       id="hero"
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
       style={{
-        background: 'linear-gradient(180deg, #E8F0FF 0%, #F0F4FF 40%, #FFFFFF 100%)',
+        background: 'linear-gradient(180deg, #F6F2EA 0%, #FAF8F3 40%, #FFFFFF 100%)',
       }}
     >
       {/* Decorative ambient blobs */}
@@ -27,7 +27,7 @@ export function HeroSection() {
           animate={{ y: [-10, 10, -10], rotate: [0, 5, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <Bird className="w-7 h-7 text-devine-navy/50" />
+          <span className="w-7 h-7 text-devine-navy/50" >🦋</span>
         </motion.div>
         <motion.div
           className="absolute top-1/3 right-[20%] opacity-30"
@@ -142,7 +142,7 @@ export function HeroSection() {
       </div>
 
       {/* Bottom gradient transition to dark */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-white pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-devine-white pointer-events-none" />
     </section>
   );
 }

@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'motion/react';
 import { Logo } from '@/components/ui/logo';
-import { cn } from '@/lib/utils';
+import { Instagram } from 'lucide-react';
 
 const navLinks = [
   { label: 'Главная', href: '#hero' },
@@ -11,88 +11,138 @@ const navLinks = [
   { label: 'Направления', href: '#directions' },
   { label: 'События', href: '#events' },
   { label: 'Команда', href: '#team' },
-  { label: 'Присоединяйся', href: '#cta' },
 ];
 
 export function Header() {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const [showOutline, setShowOutline] = useState(false);
+
+  const { scrollY } = useScroll();
+  const SCROLL_THRESHOLD = 200;
+
+  // Shrinking pill: full-width → narrow on scroll
+  const maxWidthValue = useTransform(scrollY, [0, SCROLL_THRESHOLD], [1280, 820]);
+  const blurValue = useTransform(scrollY, [0, SCROLL_THRESHOLD], [8, 16]);
+
+  const springMaxWidth = useSpring(maxWidthValue, {
+    damping: 20,
+    stiffness: 100,
+    mass: 0.5,
+  });
+
+  const springBlur = useSpring(blurValue, {
+    damping: 25,
+    stiffness: 120,
+  });
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+    const updateOnScroll = () => {
+      setHasScrolled(window.scrollY > 0);
+      setShowOutline(springMaxWidth.get() <= 750);
+    };
+
+    updateOnScroll();
+    window.addEventListener('scroll', updateOnScroll, { passive: true });
+
+    const unsubscribe = springMaxWidth.on('change', () => {
+      setShowOutline(springMaxWidth.get() <= 750);
+    });
+
+    return () => {
+      window.removeEventListener('scroll', updateOnScroll);
+      unsubscribe();
+    };
+  }, [springMaxWidth]);
 
   return (
     <>
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-        className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-          scrolled
-            ? 'bg-devine-navy/95 backdrop-blur-md border-b border-white/[0.06] shadow-lg shadow-black/10'
-            : 'bg-devine-navy/80 backdrop-blur-sm'
-        )}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-18">
-            {/* Logo */}
-            <a href="#hero" className="flex-shrink-0">
-              <Logo size="sm" />
-            </a>
+      <header className="pointer-events-none fixed left-0 right-0 top-0 z-50 w-full px-4 py-3 mx-auto">
+        <motion.nav
+          className="pointer-events-auto flex w-full items-center justify-between gap-2 rounded-full px-4 py-1.5 sm:pr-2.5 mx-auto overflow-hidden"
+          style={{
+            width: '100%',
+            maxWidth: springMaxWidth,
+            backgroundColor: 'rgba(14, 23, 51, 0.9)',
+            backdropFilter: `blur(${springBlur}px)`,
+            outline: showOutline
+              ? '1px solid rgba(200, 182, 255, 0.1)'
+              : 'none',
+          }}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.25, 0.4, 0.25, 1] }}
+        >
+          {/* Logo */}
+          <motion.a
+            href="#hero"
+            className="flex-shrink-0"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Logo size="sm" />
+          </motion.a>
 
-            {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
+          {/* Desktop Nav — animated links */}
+          <ul className="hidden lg:flex items-center gap-0.5 text-sm flex-shrink min-w-0">
+            {navLinks.map((link) => (
+              <li key={link.href} className="group relative">
+                <motion.a
                   href={link.href}
-                  className="relative px-3.5 py-2 text-sm text-white/70 hover:text-white transition-colors duration-200 group"
+                  className="flex items-center px-2.5 py-2 text-white/60 hover:text-white transition-colors duration-200 whitespace-nowrap"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  {link.label}
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-devine-lavender group-hover:w-4/5 transition-all duration-300" />
-                </a>
-              ))}
-            </nav>
+                  <span className="relative inline-flex overflow-hidden">
+                    <div className="translate-y-0 skew-y-0 transform-gpu transition-transform duration-500 group-hover:-translate-y-[110%] group-hover:skew-y-12">
+                      {link.label}
+                    </div>
+                    <div className="absolute translate-y-[110%] skew-y-12 transform-gpu text-white transition-transform duration-500 group-hover:translate-y-0 group-hover:skew-y-0">
+                      {link.label}
+                    </div>
+                  </span>
+                </motion.a>
+              </li>
+            ))}
+          </ul>
 
-            {/* CTA Button */}
-            <div className="hidden lg:block">
-              <a
-                href="https://www.instagram.com/devine_aitu"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-full bg-devine-lavender/10 text-devine-lavender border border-devine-lavender/20 hover:bg-devine-lavender/20 hover:border-devine-lavender/40 hover:shadow-[0_0_20px_rgba(200,182,255,0.15)] transition-all duration-300"
-              >
-                Стать девайнеркой
-                <span className="text-xs">→</span>
-              </a>
-            </div>
-
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden flex flex-col gap-1.5 p-2"
-              aria-label="Toggle menu"
+          {/* Right side: CTA */}
+          <div className="hidden lg:flex items-center flex-shrink-0 ml-auto">
+            <motion.a
+              href="https://www.instagram.com/devine_aitu"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium rounded-full bg-devine-lavender/10 text-devine-lavender border border-devine-lavender/20 hover:bg-devine-lavender/20 hover:border-devine-lavender/40 hover:shadow-[0_0_20px_rgba(200,182,255,0.15)] transition-all duration-300 whitespace-nowrap"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
             >
-              <motion.span
-                animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-                className="block w-5 h-[2px] bg-white/80"
-              />
-              <motion.span
-                animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-                className="block w-5 h-[2px] bg-white/80"
-              />
-              <motion.span
-                animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-                className="block w-5 h-[2px] bg-white/80"
-              />
-            </button>
+              <Instagram className="w-3.5 h-3.5" />
+              Стать девайнеркой
+              <span className="text-xs">→</span>
+            </motion.a>
           </div>
-        </div>
-      </motion.header>
+
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="lg:hidden flex flex-col gap-1.5 p-2"
+            aria-label="Toggle menu"
+          >
+            <motion.span
+              animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+              className="block w-5 h-[2px] bg-white/80"
+            />
+            <motion.span
+              animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
+              className="block w-5 h-[2px] bg-white/80"
+            />
+            <motion.span
+              animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+              className="block w-5 h-[2px] bg-white/80"
+            />
+          </button>
+        </motion.nav>
+      </header>
 
       {/* Mobile menu */}
       <AnimatePresence>
@@ -102,7 +152,7 @@ export function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 pt-16 bg-devine-navy/98 backdrop-blur-xl lg:hidden"
+            className="fixed inset-0 z-40 pt-20 bg-devine-navy/98 backdrop-blur-xl lg:hidden"
           >
             <nav className="flex flex-col items-center gap-2 pt-8 px-6">
               {navLinks.map((link, i) => (

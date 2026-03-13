@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { Bird, Sparkles, Heart, PawPrint } from 'lucide-react';
+import { Sparkles, Heart, PawPrint } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 
 export function CTASection() {
@@ -10,7 +10,7 @@ export function CTASection() {
       id="cta"
       className="relative py-24 sm:py-32 overflow-hidden"
       style={{
-        background: 'linear-gradient(180deg, #0F1F3D 0%, #E8F0FF 30%, #F0F4FF 70%, #FFFFFF 100%)',
+        background: 'linear-gradient(180deg, #1A2552 0%, #F6F2EA 30%, #FAF8F3 70%, #FFFFFF 100%)',
       }}
     >
       {/* Decorative blobs */}
@@ -26,7 +26,7 @@ export function CTASection() {
           animate={{ y: [-10, 10, -10], rotate: [-5, 5, -5] }}
           transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <Bird className="w-8 h-8" />
+          <span className="w-8 h-8" >🦋</span>
         </motion.div>
         <motion.div
           className="absolute bottom-16 right-[10%] hidden sm:block text-devine-gold/60"

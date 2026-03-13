@@ -1,10 +1,14 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, type PanInfo } from 'motion/react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { GlowCard } from '@/components/ui/glow-card';
-import { Heart, Paperclip, Film, Orbit, Flower, Crown, Gem, Clapperboard, Star, Flower2, Bird, Users } from 'lucide-react';
-
+import {
+  Heart, Paperclip, Film, Orbit, Flower,
+  Crown, Gem, Clapperboard, Star, Flower2,
+  ChevronLeft, ChevronRight,
+} from 'lucide-react';
 import type { ReactNode } from 'react';
 
 const team: { name: string; role: string; emoji: ReactNode; bio: string; accent: string; placeholder: ReactNode }[] = [
@@ -50,7 +54,65 @@ const team: { name: string; role: string; emoji: ReactNode; bio: string; accent:
   },
 ];
 
+const SWIPE_THRESHOLD = 50;
+const AUTO_PLAY_INTERVAL = 5000;
+
+const slideVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 300 : -300,
+    opacity: 0,
+    scale: 0.9,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    zIndex: 1,
+  },
+  exit: (direction: number) => ({
+    x: direction < 0 ? 300 : -300,
+    opacity: 0,
+    scale: 0.9,
+    zIndex: 0,
+  }),
+};
+
 export function TeamSection() {
+  const [[activeIndex, direction], setActiveIndex] = useState([0, 0]);
+  const [isHovered, setIsHovered] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const paginate = useCallback(
+    (dir: number) => {
+      setActiveIndex(([prev]) => {
+        const next = (prev + dir + team.length) % team.length;
+        return [next, dir];
+      });
+    },
+    [],
+  );
+
+  // Auto-play
+  useEffect(() => {
+    if (isHovered) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      return;
+    }
+    timerRef.current = setInterval(() => paginate(1), AUTO_PLAY_INTERVAL);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isHovered, paginate]);
+
+  const handleDragEnd = (_: unknown, info: PanInfo) => {
+    if (info.offset.x < -SWIPE_THRESHOLD) paginate(1);
+    else if (info.offset.x > SWIPE_THRESHOLD) paginate(-1);
+  };
+
+  const goTo = (idx: number) => {
+    setActiveIndex(([prev]) => [idx, idx > prev ? 1 : -1]);
+  };
+
   return (
     <section
       id="team"
@@ -68,26 +130,104 @@ export function TeamSection() {
             Познакомься с теми, кто создаёт Devine
           </h2>
           <p className="text-center text-white/40 text-lg mb-16 max-w-xl mx-auto">
-            Пять невероятных девушек, объединённых одной идеей <Bird className="inline w-5 h-5 text-devine-lavender" />
+            Пять невероятных девушек, объединённых одной идеей{' '}
+            <span className="inline w-5 h-5 text-devine-lavender" >🦋</span>
           </p>
         </ScrollReveal>
 
-        {/* First row: 3 cards */}
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-6 lg:mb-8">
-          {team.slice(0, 3).map((member, i) => (
-            <ScrollReveal key={member.name} delay={i * 0.1}>
-              <TeamCard member={member} />
-            </ScrollReveal>
+        {/* Carousel */}
+        <div
+          className="relative"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {/* Main carousel area */}
+          <div className="relative max-w-sm mx-auto h-[540px] sm:h-[520px]">
+            <AnimatePresence initial={false} custom={direction} mode="popLayout">
+              <motion.div
+                key={activeIndex}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{
+                  x: { type: 'spring', stiffness: 300, damping: 30 },
+                  opacity: { duration: 0.25 },
+                  scale: { duration: 0.3 },
+                }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.7}
+                onDragEnd={handleDragEnd}
+                className="absolute inset-0 cursor-grab active:cursor-grabbing"
+              >
+                <TeamCard member={team[activeIndex]} />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Navigation arrows */}
+          <button
+            onClick={() => paginate(-1)}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:translate-x-0 lg:-translate-x-16 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/[0.06] backdrop-blur-sm border border-white/[0.08] flex items-center justify-center text-white/60 hover:text-white hover:bg-white/[0.12] hover:border-devine-lavender/30 transition-all duration-300"
+            aria-label="Previous member"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => paginate(1)}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-0 lg:translate-x-16 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/[0.06] backdrop-blur-sm border border-white/[0.08] flex items-center justify-center text-white/60 hover:text-white hover:bg-white/[0.12] hover:border-devine-lavender/30 transition-all duration-300"
+            aria-label="Next member"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Dot indicators */}
+        <div className="flex items-center justify-center gap-2.5 mt-10">
+          {team.map((member, i) => (
+            <button
+              key={member.name}
+              onClick={() => goTo(i)}
+              aria-label={`Go to ${member.name}`}
+              className="relative p-1"
+            >
+              <motion.div
+                className="w-2.5 h-2.5 rounded-full"
+                animate={{
+                  scale: i === activeIndex ? 1 : 0.75,
+                  backgroundColor: i === activeIndex ? member.accent : 'rgba(255,255,255,0.2)',
+                }}
+                whileHover={{ scale: 1.2 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+              />
+              {i === activeIndex && (
+                <motion.div
+                  layoutId="team-dot-ring"
+                  className="absolute inset-0 rounded-full border-2"
+                  style={{ borderColor: member.accent }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                />
+              )}
+            </button>
           ))}
         </div>
 
-        {/* Second row: 2 cards, centered */}
-        <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-3xl mx-auto">
-          {team.slice(3).map((member, i) => (
-            <ScrollReveal key={member.name} delay={(i + 3) * 0.1}>
-              <TeamCard member={member} />
-            </ScrollReveal>
-          ))}
+        {/* Name ticker under dots */}
+        <div className="mt-4 text-center h-6 overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={activeIndex}
+              initial={{ y: 12, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -12, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="text-sm font-medium text-white/50"
+            >
+              {team[activeIndex].name} · {team[activeIndex].role}
+            </motion.p>
+          </AnimatePresence>
         </div>
       </div>
     </section>
@@ -99,12 +239,15 @@ function TeamCard({ member }: { member: (typeof team)[number] }) {
     <GlowCard
       className="h-full"
       glowColor={`${member.accent}12`}
+      hoverScale={1}
     >
       <div className="p-6 sm:p-8 flex flex-col h-full">
         {/* Photo placeholder — replace with real photos later */}
-        <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-5 bg-gradient-to-br from-devine-navy to-devine-dark border border-white/[0.06]">
+        <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-5 bg-gradient-to-br from-devine-navy to-devine-dark border border-white/[0.06]">
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-5xl" style={{ color: member.accent }}>{member.placeholder}</span>
+            <span className="text-5xl" style={{ color: member.accent }}>
+              {member.placeholder}
+            </span>
           </div>
           {/* Gradient overlay */}
           <div
@@ -118,7 +261,9 @@ function TeamCard({ member }: { member: (typeof team)[number] }) {
 
         {/* Info */}
         <div className="flex items-start gap-2 mb-3">
-          <span className="text-lg" style={{ color: member.accent }}>{member.emoji}</span>
+          <span className="text-lg" style={{ color: member.accent }}>
+            {member.emoji}
+          </span>
           <div>
             <h3 className="text-lg font-bold text-white">{member.name}</h3>
             <p className="text-sm font-medium" style={{ color: member.accent }}>
@@ -136,7 +281,6 @@ function TeamCard({ member }: { member: (typeof team)[number] }) {
         <motion.div
           className="mt-4 h-[2px] rounded-full"
           style={{ backgroundColor: `${member.accent}30` }}
-          whileHover={{ scaleX: 1.1 }}
         />
       </div>
     </GlowCard>

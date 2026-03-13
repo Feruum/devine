@@ -2,13 +2,13 @@
 
 @theme inline {
   /* ── Devine Brand Colors ── */
-  --color-devine-navy: #0F1F3D;
-  --color-devine-white: #FFFFFF;
+  --color-devine-navy: #1A2552;
+  --color-devine-white: #F6F2EA;
   --color-devine-lavender: #C8B6FF;
   --color-devine-gold: #F4D8A8;
-  --color-devine-sky: #E8F0FF;
+  --color-devine-sky: #FAF8F3;
   --color-devine-purple: #9D6EFF;
-  --color-devine-dark: #080E1A;
+  --color-devine-dark: #0E1733;
 
   /* ── Fonts ── */
   --font-sans: var(--font-inter);
@@ -32,7 +32,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #080E1A;
+  background: #0E1733;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -48,14 +48,14 @@ body {
 .glow-border {
   border: 1px solid transparent;
   background:
-    linear-gradient(#0F1F3D, #0F1F3D) padding-box,
+    linear-gradient(#1A2552, #1A2552) padding-box,
     linear-gradient(135deg, rgba(200, 182, 255, 0.4), rgba(157, 110, 255, 0.4)) border-box;
   transition: all 0.3s ease;
 }
 
 .glow-border:hover {
   background:
-    linear-gradient(#0F1F3D, #0F1F3D) padding-box,
+    linear-gradient(#1A2552, #1A2552) padding-box,
     linear-gradient(135deg, rgba(200, 182, 255, 0.8), rgba(157, 110, 255, 0.8)) border-box;
   box-shadow: 0 0 24px rgba(200, 182, 255, 0.15);
 }

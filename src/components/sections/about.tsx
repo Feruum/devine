@@ -5,11 +5,7 @@ import { User } from 'lucide-react';
 
 export function AboutSection() {
   return (
-    <section id="about" className="relative py-24 sm:py-32 overflow-hidden"
-      style={{
-        background: 'linear-gradient(180deg, #FFFFFF 0%, #0F1F3D 100%)',
-      }}
-    >
+    <section id="about" className="relative py-24 sm:py-32 overflow-hidden bg-devine-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left: Photo placeholder */}
@@ -43,13 +39,13 @@ export function AboutSection() {
                   О нас
                 </span>
               </div>
-              <p className="text-devine-navy/60 text-sm font-medium tracking-wide uppercase">
+              <p className="text-white/50 text-sm font-medium tracking-wide uppercase">
                 Наша миссия • Наше видение
               </p>
             </ScrollReveal>
 
             <ScrollReveal delay={0.2}>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-devine-navy leading-tight">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-white leading-tight">
                 Мы посвящаем себя тому, чтобы каждая девушка в AITU могла{' '}
                 <span className="text-devine-purple">исцелиться</span>, вырасти и{' '}
                 <span className="text-devine-lavender">расцвести</span> через поддержку,
@@ -58,7 +54,7 @@ export function AboutSection() {
             </ScrollReveal>
 
             <ScrollReveal delay={0.3}>
-              <p className="text-lg text-devine-navy/60 leading-relaxed">
+              <p className="text-lg text-white/60 leading-relaxed">
                 Мы создаём пространство, где наука встречается с заботой, а амбиции — с
                 сестринской любовью. Академическая помощь, социальные события и направление
                 «Женщины в IT» — всё для того, чтобы ты чувствовала себя уверенной и
@@ -78,14 +74,14 @@ export function AboutSection() {
 
             {/* Stats */}
             <ScrollReveal delay={0.5}>
-              <div className="flex flex-wrap gap-8 pt-6 border-t border-devine-navy/10">
+              <div className="flex flex-wrap gap-8 pt-6 border-t border-white/10">
                 <div>
-                  <div className="text-3xl font-bold text-devine-navy">200+</div>
-                  <div className="text-sm text-devine-navy/50">Счастливых девайнерок</div>
+                  <div className="text-3xl font-bold text-white">200+</div>
+                  <div className="text-sm text-white/50">Счастливых девайнерок</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-devine-navy">150+</div>
-                  <div className="text-sm text-devine-navy/50">Проведённых событий</div>
+                  <div className="text-3xl font-bold text-white">150+</div>
+                  <div className="text-sm text-white/50">Проведённых событий</div>
                 </div>
               </div>
             </ScrollReveal>

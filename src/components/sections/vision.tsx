@@ -3,7 +3,7 @@
 import { motion } from 'motion/react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { TextShimmer } from '@/components/ui/text-shimmer';
-import { Heart, Sparkles, Bird, PawPrint } from 'lucide-react';
+import { Heart, Sparkles, PawPrint } from 'lucide-react';
 
 export function VisionSection() {
   return (
@@ -57,10 +57,10 @@ export function VisionSection() {
                 animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.1, 1] }}
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <Bird className="w-10 h-10 text-devine-lavender/60" />
+                <span className="w-10 h-10 text-devine-lavender/60" >🦋</span>
               </motion.div>
               <p className="text-lg sm:text-xl text-white/70 leading-relaxed">
-                <Bird className="inline w-5 h-5 text-devine-lavender mr-1" /> Наша команда топовых талантов сочетает креативность, заботу и силу,
+                <span className="inline w-5 h-5 text-devine-lavender mr-1" >🦋</span> Наша команда топовых талантов сочетает креативность, заботу и силу,
               </p>
             </div>
           </ScrollReveal>
