@@ -2,6 +2,7 @@
 
 import { motion } from 'motion/react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
+import { Bird, Sparkles, Flower2, Heart, PawPrint, ArrowRight } from 'lucide-react';
 
 export function HeroSection() {
   return (
@@ -21,34 +22,34 @@ export function HeroSection() {
 
       {/* Floating decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.span
-          className="absolute top-1/4 left-[15%] text-2xl opacity-40"
+        <motion.div
+          className="absolute top-1/4 left-[15%] opacity-40"
           animate={{ y: [-10, 10, -10], rotate: [0, 5, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
         >
-          🦋
-        </motion.span>
-        <motion.span
-          className="absolute top-1/3 right-[20%] text-xl opacity-30"
+          <Bird className="w-7 h-7 text-devine-navy/50" />
+        </motion.div>
+        <motion.div
+          className="absolute top-1/3 right-[20%] opacity-30"
           animate={{ y: [5, -15, 5], rotate: [0, -5, 0] }}
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
         >
-          ✨
-        </motion.span>
-        <motion.span
-          className="absolute bottom-1/3 left-[25%] text-lg opacity-25"
+          <Sparkles className="w-6 h-6 text-devine-gold/60" />
+        </motion.div>
+        <motion.div
+          className="absolute bottom-1/3 left-[25%] opacity-25"
           animate={{ y: [-5, 12, -5] }}
           transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
         >
-          🌸
-        </motion.span>
-        <motion.span
-          className="absolute bottom-1/4 right-[15%] text-xl opacity-30"
+          <Flower2 className="w-5 h-5 text-devine-lavender/50" />
+        </motion.div>
+        <motion.div
+          className="absolute bottom-1/4 right-[15%] opacity-30"
           animate={{ y: [8, -8, 8], rotate: [0, 10, 0] }}
           transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
         >
-          🤍
-        </motion.span>
+          <Heart className="w-6 h-6 text-devine-lavender/40" />
+        </motion.div>
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center pt-24 pb-16">
@@ -59,7 +60,7 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/60 backdrop-blur-sm border border-devine-lavender/20 text-devine-navy/70 text-sm font-medium mb-8 shadow-sm"
         >
-          🤍 Mindfulness & Sisterhood
+          <Heart className="w-4 h-4 text-devine-lavender" /> Mindfulness & Sisterhood
         </motion.div>
 
         {/* Main headline */}
@@ -95,7 +96,7 @@ export function HeroSection() {
           </p>
           <p className="text-sm sm:text-base text-devine-navy/50 leading-relaxed">
             Мы начали эту идею ещё в начале учебного года. Теперь она здесь — Devine.
-            Клуб поддержки, роста и невероятных личностей. Добро пожаловать домой 🐾
+            Клуб поддержки, роста и невероятных личностей. Добро пожаловать домой <PawPrint className="inline w-4 h-4 text-devine-navy/50" />
           </p>
         </motion.div>
 
@@ -116,7 +117,7 @@ export function HeroSection() {
               className="inline-flex items-center gap-2.5 px-8 py-4 text-lg font-semibold rounded-full bg-devine-navy text-white shadow-xl shadow-devine-navy/20 hover:bg-devine-navy/90 transition-colors duration-300"
             >
               Присоединяйся к Devine
-              <span>→</span>
+              <ArrowRight className="w-5 h-5" />
             </motion.button>
           </a>
         </motion.div>

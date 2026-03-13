@@ -3,47 +3,50 @@
 import { motion } from 'motion/react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { GlowCard } from '@/components/ui/glow-card';
+import { Heart, Paperclip, Film, Orbit, Flower, Crown, Gem, Clapperboard, Star, Flower2, Bird, Users } from 'lucide-react';
 
-const team = [
+import type { ReactNode } from 'react';
+
+const team: { name: string; role: string; emoji: ReactNode; bio: string; accent: string; placeholder: ReactNode }[] = [
   {
     name: 'Арафат',
     role: 'Президент',
-    emoji: '🤍',
+    emoji: <Heart className="w-5 h-5" />,
     bio: 'Строгость и забота в одном флаконе. Говорит прямо, думает по-новому, управляет командой с уважением и любовью. Настоящая wise queen.',
     accent: '#C8B6FF',
-    placeholder: '👑',
+    placeholder: <Crown className="w-12 h-12" />,
   },
   {
     name: 'Альбина',
     role: 'Вице-президент',
-    emoji: '🖇️',
-    bio: 'Воплощение дисциплины и доброты. Порядок — её второе имя. А 70 % знакомых уверены, что Моля — её сестра 🫂',
+    emoji: <Paperclip className="w-5 h-5" />,
+    bio: 'Воплощение дисциплины и доброты. Порядок — её второе имя. А 70 % знакомых уверены, что Моля — её сестра',
     accent: '#F4D8A8',
-    placeholder: '💎',
+    placeholder: <Gem className="w-12 h-12" />,
   },
   {
     name: 'Райхан',
     role: 'Контент-мейкер',
-    emoji: '🎞️',
+    emoji: <Film className="w-5 h-5" />,
     bio: 'Появляется редко, но когда приходит — зажигает харизмой и юмором. Творческая душа коллектива и яркая энергия.',
     accent: '#9D6EFF',
-    placeholder: '🎬',
+    placeholder: <Clapperboard className="w-12 h-12" />,
   },
   {
     name: 'Бота',
     role: 'Хаос в самом милом виде',
-    emoji: '🌀',
+    emoji: <Orbit className="w-5 h-5" />,
     bio: 'Смешная, милая и непредсказуемая. Никогда не угадаешь, какую шутку она выкинет следующей.',
     accent: '#C8B6FF',
-    placeholder: '🌟',
+    placeholder: <Star className="w-12 h-12" />,
   },
   {
     name: 'Моля',
     role: 'HR, ивент-менеджер, финансовый менеджер и дизайнер',
-    emoji: '🌷',
+    emoji: <Flower className="w-5 h-5" />,
     bio: 'Мастер multitasking. Успевает всё, делает всё красиво и с любовью.',
     accent: '#F4D8A8',
-    placeholder: '🌺',
+    placeholder: <Flower2 className="w-12 h-12" />,
   },
 ];
 
@@ -65,7 +68,7 @@ export function TeamSection() {
             Познакомься с теми, кто создаёт Devine
           </h2>
           <p className="text-center text-white/40 text-lg mb-16 max-w-xl mx-auto">
-            Пять невероятных девушек, объединённых одной идеей 🦋
+            Пять невероятных девушек, объединённых одной идеей <Bird className="inline w-5 h-5 text-devine-lavender" />
           </p>
         </ScrollReveal>
 
@@ -101,7 +104,7 @@ function TeamCard({ member }: { member: (typeof team)[number] }) {
         {/* Photo placeholder — replace with real photos later */}
         <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-5 bg-gradient-to-br from-devine-navy to-devine-dark border border-white/[0.06]">
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-5xl">{member.placeholder}</span>
+            <span className="text-5xl" style={{ color: member.accent }}>{member.placeholder}</span>
           </div>
           {/* Gradient overlay */}
           <div
@@ -115,7 +118,7 @@ function TeamCard({ member }: { member: (typeof team)[number] }) {
 
         {/* Info */}
         <div className="flex items-start gap-2 mb-3">
-          <span className="text-lg">{member.emoji}</span>
+          <span className="text-lg" style={{ color: member.accent }}>{member.emoji}</span>
           <div>
             <h3 className="text-lg font-bold text-white">{member.name}</h3>
             <p className="text-sm font-medium" style={{ color: member.accent }}>

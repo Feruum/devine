@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { Bird, Sparkle } from 'lucide-react';
 
 interface LogoProps {
   className?: string;
@@ -32,8 +33,8 @@ export function Logo({ className, size = 'md' }: LogoProps) {
       >
         <span className="text-white font-bold text-xs tracking-tight">D</span>
         {/* Small butterfly + star above "i" — placeholder */}
-        <span className="absolute -top-0.5 -right-0.5 text-[8px]">🦋</span>
-        <span className="absolute -top-1 right-1 text-[6px] text-devine-gold">✦</span>
+        <Bird className="absolute -top-1 -right-1 w-3 h-3 text-white/80" strokeWidth={1.5} />
+        <Sparkle className="absolute -top-2 right-0.5 w-2 h-2 text-devine-gold" strokeWidth={2} />
       </div>
       <span
         className={cn(

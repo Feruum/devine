@@ -3,27 +3,30 @@
 import { motion } from 'motion/react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { GlowCard } from '@/components/ui/glow-card';
+import { BookOpen, Flower2, Laptop, CalendarDays } from 'lucide-react';
 
-const events = [
+import type { ReactNode } from 'react';
+
+const events: { title: string; date: string; type: string; icon: ReactNode; accent: string }[] = [
   {
     title: 'Study Session: Алгоритмы и структуры данных',
     date: 'Скоро',
     type: 'Академическая поддержка',
-    emoji: '📖',
+    icon: <BookOpen className="w-10 h-10" />,
     accent: '#C8B6FF',
   },
   {
     title: 'Весенний пикник Devine',
     date: 'Скоро',
     type: 'Социальное событие',
-    emoji: '🌸',
+    icon: <Flower2 className="w-10 h-10" />,
     accent: '#F4D8A8',
   },
   {
     title: 'Women in Tech: Гостевая лекция',
     date: 'Скоро',
     type: 'Женщины в IT',
-    emoji: '💻',
+    icon: <Laptop className="w-10 h-10" />,
     accent: '#9D6EFF',
   },
 ];
@@ -43,7 +46,7 @@ export function EventsSection() {
             Предстоящие события
           </h2>
           <p className="text-center text-white/40 text-lg mb-16 max-w-xl mx-auto">
-            Следи за нашим расписанием — впереди много интересного 🗓️
+            Следи за нашим расписанием — впереди много интересного <CalendarDays className="inline w-5 h-5 text-devine-lavender" />
           </p>
         </ScrollReveal>
 
@@ -71,13 +74,14 @@ export function EventsSection() {
                   </div>
 
                   {/* Icon */}
-                  <motion.span
-                    className="text-4xl mb-4 block"
+                  <motion.div
+                    className="mb-4 block"
+                    style={{ color: event.accent }}
                     whileHover={{ scale: 1.2, rotate: 10 }}
                     transition={{ type: 'spring', stiffness: 400 }}
                   >
-                    {event.emoji}
-                  </motion.span>
+                    {event.icon}
+                  </motion.div>
 
                   {/* Title */}
                   <h3 className="text-lg font-bold text-white mb-4 flex-grow">

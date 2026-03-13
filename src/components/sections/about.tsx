@@ -1,6 +1,7 @@
 'use client';
 
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
+import { User } from 'lucide-react';
 
 export function AboutSection() {
   return (
@@ -18,7 +19,7 @@ export function AboutSection() {
               <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden bg-gradient-to-br from-devine-sky via-devine-lavender/20 to-devine-sky shadow-2xl">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
-                    <span className="text-6xl block mb-4">🧘‍♀️</span>
+                    <User className="w-16 h-16 text-devine-navy/20" strokeWidth={1} />
                     <p className="text-devine-navy/40 text-sm px-8">
                       {/* TODO: Replace with real photo — calm, long hair, eyes closed */}
                       Фото: девушка, гармония, спокойствие
